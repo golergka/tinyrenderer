@@ -27,3 +27,6 @@
 *.out
 *.app
 main
+
+# Output
+output.tga
