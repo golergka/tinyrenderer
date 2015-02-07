@@ -74,9 +74,33 @@ void triangle(
 	{
 		std::swap(t1, t2);
 	}
+
+	int total_height = t2.y - t0.y;
+	int segment_height = t1.y - t0.y + 1;
+
+	for(int y = t0.y; y <= t1.y; y++)
+	{
+		float alpha = (float) (y - t0.y) / total_height;
+		float beta  = (float) (y - t0.y) / segment_height;
+		Vec2i A = t0 + (t2 - t0) * alpha;
+		Vec2i B = t0 + (t1 - t0) * beta;
+		line(A, B, image, color);
+	}
+
+	segment_height = t2.y - t1.y + 1;
+	for(int y = t1.y; y <= t2.y; y++)
+	{
+		float alpha = (float) (y - t0.y) / total_height;
+		float beta  = (float) (y - t1.y) / segment_height;
+		Vec2i A = t0 + (t2 - t0) * alpha;
+		Vec2i B = t1 + (t2 - t1) * beta;
+		line (A, B, image, color);
+	}
+	/*
 	line(t0, t1, image, color);
 	line(t1, t2, image, color);
 	line(t0, t2, image, color);
+	*/
 }
 
 Vec2i to_screen_space(Vec3f v)
@@ -109,7 +133,7 @@ int main(int argc, char** argv)
 				to_screen_space(v1),
 				to_screen_space(v2),
 				image,
-				white
+				TGAColor(rand()%255, rand()%255, rand()%255, 255)
 			);
 	}
 	image.flip_vertically(); // i want to have the origin at the left bottom corner of the image

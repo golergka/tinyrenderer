@@ -25,7 +25,7 @@ template <class t> struct Vec2
 		return Vec2<t> (u - V.u, v - V.v);
 	}
 
-	inline Vec2<t> operator +(float f) const
+	inline Vec2<t> operator *(float f) const
 	{
 		return Vec2<t> (u * f, v * f);
 	}
