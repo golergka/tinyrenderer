@@ -139,7 +139,7 @@ int main(int argc, char** argv)
 		Vec3f v0 = model->vert(face[0]);
 		Vec3f v1 = model->vert(face[1]);
 		Vec3f v2 = model->vert(face[2]);
-		Vec3f normal = ((v1 - v0) ^ (v2 - v0)).normalize();
+		Vec3f normal = ((v1 - v0)^(v2 - v0)).normalize();
 		float intensity = normal * light_dir;
 		if (intensity > 0)
 		{
