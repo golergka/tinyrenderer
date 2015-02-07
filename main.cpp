@@ -76,25 +76,30 @@ void triangle(
 	}
 
 	int total_height = t2.y - t0.y;
-	int segment_height = t1.y - t0.y + 1;
-
-	for(int y = t0.y; y <= t1.y; y++)
+	int segment_height = t1.y - t0.y;
+	if (segment_height != 0)
 	{
-		float alpha = (float) (y - t0.y) / total_height;
-		float beta  = (float) (y - t0.y) / segment_height;
-		Vec2i A = t0 + (t2 - t0) * alpha;
-		Vec2i B = t0 + (t1 - t0) * beta;
-		line(A, B, image, color);
+		for(int y = t0.y; y <= t1.y; y++)
+		{
+			float alpha = (float) (y - t0.y) / total_height;
+			float beta  = (float) (y - t0.y) / segment_height;
+			Vec2i A = t0 + (t2 - t0) * alpha;
+			Vec2i B = t0 + (t1 - t0) * beta;
+			line(A, B, image, color);
+		}
 	}
 
 	segment_height = t2.y - t1.y + 1;
-	for(int y = t1.y; y <= t2.y; y++)
+	if (segment_height != 0)
 	{
-		float alpha = (float) (y - t0.y) / total_height;
-		float beta  = (float) (y - t1.y) / segment_height;
-		Vec2i A = t0 + (t2 - t0) * alpha;
-		Vec2i B = t1 + (t2 - t1) * beta;
-		line (A, B, image, color);
+		for(int y = t1.y; y <= t2.y; y++)
+		{
+			float alpha = (float) (y - t0.y) / total_height;
+			float beta  = (float) (y - t1.y) / segment_height;
+			Vec2i A = t0 + (t2 - t0) * alpha;
+			Vec2i B = t1 + (t2 - t1) * beta;
+			line (A, B, image, color);
+		}
 	}
 }
 
