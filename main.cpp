@@ -76,43 +76,21 @@ void triangle(
 	}
 
 	int total_height = t2.y - t0.y;
-	int segment_height = t1.y - t0.y;
-	if (segment_height != 0)
+	for (int y = 0; y < total_height; y++)
 	{
-		for(int y = t0.y; y <= t1.y; y++)
+		bool second_half = y > t1.y - t0.y || t1.y == t0.y;
+		int segment_height = second_half ? t2.y - t1.y : t1.y - t0.y;
+		float alpha = (float) y / total_height;
+		float beta  = (float) (y - (second_half ? t1.y - t0.y : 0)) / segment_height;
+		Vec2i A = t0 + (t2 - t0) * alpha;
+		Vec2i B = second_half ? t1 + (t2 - t1) * beta : t0 + (t1 - t0) * beta;
+		if (A.x > B.x)
 		{
-			float alpha = (float) (y - t0.y) / total_height;
-			float beta  = (float) (y - t0.y) / segment_height;
-			Vec2i A = t0 + (t2 - t0) * alpha;
-			Vec2i B = t0 + (t1 - t0) * beta;
-			if (A.x > B.x)
-			{
-				std::swap(A, B);
-			}
-			for(int x = A.x; x <= B.x; x++)
-			{
-				image.set(x, y, color);
-			}
+			std::swap(A, B);
 		}
-	}
-
-	segment_height = t2.y - t1.y;
-	if (segment_height != 0)
-	{
-		for(int y = t1.y; y <= t2.y; y++)
+		for (int x = A.x; x < B.x; x++)
 		{
-			float alpha = (float) (y - t0.y) / total_height;
-			float beta  = (float) (y - t1.y) / segment_height;
-			Vec2i A = t0 + (t2 - t0) * alpha;
-			Vec2i B = t1 + (t2 - t1) * beta;
-			if (A.x > B.x)
-			{
-				std::swap(A, B);
-			}
-			for(int x = A.x; x <= B.x; x++)
-			{
-				image.set(x, y, color);
-			}
+			image.set(x, y + t0.y, color);
 		}
 	}
 }
