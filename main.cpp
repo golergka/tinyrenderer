@@ -92,7 +92,11 @@ void triangle(
 		for (int x = A.x; x < B.x; x++)
 		{
 			float phi = B.x == A.x ? 1. : (float) (x - A.x) / (float) (B.x - A.x);
-			Vec3i P = A + (B - A) * phi;
+			Vec3i P = Vec3i(
+					x, 
+					y + t0.y, 
+					A.z + (B.z - A.z) * phi
+				);
 			int idx = P.x + P.y * width;
 			if (zbuffer[idx] < P.z)
 			{
