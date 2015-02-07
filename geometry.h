@@ -85,6 +85,14 @@ template <class t> struct Vec3
 		return *this;
 	}
 
+	t& operator[] (const int i)
+	{
+		return i <= 0 ?
+				x : (
+					i == 1 ?
+					y : z);
+	}
+
 	template <class> friend std::ostream& operator<<(std::ostream& s, Vec2<t>& v);
 };
 

@@ -135,10 +135,10 @@ int main(int argc, char** argv)
 	Vec3f light_dir = Vec3f(0., 0., 1.);
 	for (int i = 0; i < model->nfaces(); i++)
 	{
-		std::vector<int> face = model->face(i);
-		Vec3f v0 = model->vert(face[0]);
-		Vec3f v1 = model->vert(face[1]);
-		Vec3f v2 = model->vert(face[2]);
+		std::vector<Vec3i> face = model->face(i);
+		Vec3f v0 = model->vert(face[0][0]);
+		Vec3f v1 = model->vert(face[1][0]);
+		Vec3f v2 = model->vert(face[2][0]);
 		Vec3f normal = ((v1 - v0)^(v2 - v0)).normalize();
 		float intensity = normal * light_dir;
 		if (intensity > 0)

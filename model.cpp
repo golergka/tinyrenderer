@@ -56,13 +56,18 @@ Model::Model(const char *filename) : _verts(), _faces()
 		// reading face lines
 		else if (!line.compare(0, 2, "f "))
 		{
-			std::vector<int> f;
-			int itrash, idx;
+			std::vector<Vec3i> f;
+			Vec3i tmp;
 			iss >> trash;
-			while (iss >> idx >> trash >> itrash  >> trash >> itrash)
+			while (iss   >> tmp[0]
+				>> trash >> tmp[1]
+				>> trash >> tmp[2])
 			{
-				idx--;
-				f.push_back(idx);
+				for(int i = 0; i < 3; i++)
+				{
+					tmp[i]--;
+				}
+				f.push_back(tmp);
 			}
 			_faces.push_back(f);
 		}
@@ -105,7 +110,7 @@ int Model::nfaces()
 	return (int)_faces.size();
 }
 
-std::vector<int> Model::face(int idx)
+std::vector<Vec3i> Model::face(int idx)
 {
 	return _faces[idx];
 }
@@ -118,4 +123,13 @@ Vec3f Model::vert(int i)
 Vec3f Model::norm(int i)
 {
 	return _norms[i];
+}
+
+Vec2f Model::uv(int iface, int nvert)
+{
+	int idx = _faces[iface][nvert][1];
+	return Vec2f(
+			_uv[idx].x * _diffuse.get_width(),
+			_uv[idx].x * _diffuse.get_height()
+		);
 }
