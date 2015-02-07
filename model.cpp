@@ -125,11 +125,16 @@ Vec3f Model::norm(int i)
 	return _norms[i];
 }
 
-Vec2f Model::uv(int iface, int nvert)
+Vec2i Model::uv(int iface, int nvert)
 {
 	int idx = _faces[iface][nvert][1];
-	return Vec2f(
+	return Vec2i(
 			_uv[idx].x * _diffuse.get_width(),
 			_uv[idx].x * _diffuse.get_height()
 		);
+}
+
+TGAColor Model::diffuse(Vec2i uv)
+{
+	return _diffuse.get(uv.x, uv.y);
 }
