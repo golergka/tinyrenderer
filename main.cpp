@@ -55,11 +55,12 @@ void line(
 }
 
 void triangle(
-		Vec2i		t0,
-		Vec2i		t1,
-		Vec2i		t2,
+		Vec3i		t0,
+		Vec3i		t1,
+		Vec3i		t2,
 		TGAImage&	image,
-		TGAColor	color
+		TGAColor	color,
+		int*		zbuffer
 	)
 {
 	if (t0.y > t1.y)
@@ -82,24 +83,32 @@ void triangle(
 		int segment_height = second_half ? t2.y - t1.y : t1.y - t0.y;
 		float alpha = (float) y / total_height;
 		float beta  = (float) (y - (second_half ? t1.y - t0.y : 0)) / segment_height;
-		Vec2i A = t0 + (t2 - t0) * alpha;
-		Vec2i B = second_half ? t1 + (t2 - t1) * beta : t0 + (t1 - t0) * beta;
+		Vec3i A = t0 + (t2 - t0) * alpha;
+		Vec3i B = second_half ? t1 + (t2 - t1) * beta : t0 + (t1 - t0) * beta;
 		if (A.x > B.x)
 		{
 			std::swap(A, B);
 		}
 		for (int x = A.x; x < B.x; x++)
 		{
-			image.set(x, y + t0.y, color);
+			float phi = B.x == A.x ? 1. : (float) (x - A.x) / (float) (B.x - A.x);
+			Vec3i P = A + (B - A) * phi;
+			int idx = P.x + P.y * width;
+			if (zbuffer[idx] < P.z)
+			{
+				zbuffer[idx] = P.z;
+				image.set(P.x, P.y, color);
+			}
 		}
 	}
 }
 
-Vec2i to_screen_space(Vec3f v)
+Vec3i to_screen_space(Vec3f v)
 {
-	return Vec2i(
+	return Vec3i(
 			(v.x + 1.) * (width / 2.),
-			(v.y + 1.) * (height / 2.)
+			(v.y + 1.) * (height / 2.),
+			v.z
 		);
 }
 
@@ -114,6 +123,11 @@ int main(int argc, char** argv)
 		model = new Model("obj/head.obj");
 	}
 	TGAImage image(width, height, TGAImage::RGB);
+	int *zbuffer = new int[width*height];
+	for(int i = 0; i < width*height; i++)
+	{
+		zbuffer[i] = std::numeric_limits<int>::min();
+	}
 	Vec3f light_dir = Vec3f(0., 0., 1.);
 	for (int i = 0; i < model->nfaces(); i++)
 	{
@@ -135,7 +149,8 @@ int main(int argc, char** argv)
 							intensity*255,
 							intensity*255,
 							255
-						)
+						),
+					zbuffer
 				);
 		}
 	}
