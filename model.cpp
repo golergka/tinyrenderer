@@ -41,6 +41,18 @@ Model::Model(const char *filename) : _verts(), _faces()
 			}
 			_norms.push_back(n);
 		}
+		// reading UV coordinates
+		else if (!line.compare(0, 3, "vt "))
+		{
+			iss >> trash;
+			Vec2f uv;
+			for (int i = 0; i < 2; i++)
+			{
+				iss >> uv.raw[i];
+			}
+			iss >> trash;
+			_uv.push_back(uv);
+		}
 		// reading face lines
 		else if (!line.compare(0, 2, "f "))
 		{
@@ -58,6 +70,7 @@ Model::Model(const char *filename) : _verts(), _faces()
 	std::cerr
 		<< "# v# " << _verts.size()
 		<< " f# " << _faces.size()
+		<< " vt# " << _uv.size()
 		<< " vn# " << _norms.size()
 		<< std::endl;
 }
