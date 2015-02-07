@@ -26,31 +26,30 @@ Model::Model(const char *filename) : _verts(), _faces()
 			Vec3f v;
 			for (int i = 0; i < 3; i++)
 			{
-				iss >> v.raw[i];
+				iss >> v[i];
 			}
 			_verts.push_back(v);
 		}
 		// reading vertex normals
 		else if (!line.compare(0, 3, "vn "))
 		{
-			iss >> trash;
+			iss >> trash >> trash;
 			Vec3f n;
 			for (int i = 0; i < 3; i++)
 			{
-				iss >> n.raw[i];
+				iss >> n[i];
 			}
 			_norms.push_back(n);
 		}
 		// reading UV coordinates
 		else if (!line.compare(0, 3, "vt "))
 		{
-			iss >> trash;
+			iss >> trash >> trash;
 			Vec2f uv;
 			for (int i = 0; i < 2; i++)
 			{
-				iss >> uv.raw[i];
+				iss >> uv[i];
 			}
-			iss >> trash;
 			_uv.push_back(uv);
 		}
 		// reading face lines
@@ -130,7 +129,7 @@ Vec2i Model::uv(int iface, int nvert)
 	int idx = _faces[iface][nvert][1];
 	return Vec2i(
 			_uv[idx].x * _diffuse.get_width(),
-			_uv[idx].x * _diffuse.get_height()
+			_uv[idx].y * _diffuse.get_height()
 		);
 }
 

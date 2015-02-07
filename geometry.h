@@ -30,6 +30,11 @@ template <class t> struct Vec2
 		return Vec2<t> (u * f, v * f);
 	}
 
+	t& operator[] (const int i)
+	{
+		return i <= 0 ?  x : y;
+	}
+
 	template <class> friend std::ostream& operator<<(std::ostream& s, Vec2<t>& v);
 };
 
@@ -104,11 +109,13 @@ typedef Vec3<int>	Vec3i;
 template <class t> std::ostream& operator <<(std::ostream& s, Vec2<t>& v)
 {
 	s << "(" << v.x << ", " << v.y << ")" << std::endl;
+	return s;
 }
 
 template <class t> std::ostream& operator <<(std::ostream& s, Vec3<t>& v)
 {
 	s << "(" << v.x << ", " << v.y << ", " << v.z << ")" << std::endl;
+	return s;
 }
 
 #endif // __GEOMETRY_H__

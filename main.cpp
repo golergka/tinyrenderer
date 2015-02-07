@@ -1,4 +1,5 @@
 #include <math.h>
+#include <iostream>
 #include "tgaimage.h"
 #include "model.h"
 #include "geometry.h"
@@ -58,22 +59,28 @@ void triangle(
 		Vec3i		t0,
 		Vec3i		t1,
 		Vec3i		t2,
+		Vec2i		u0,
+		Vec2i		u1,
+		Vec2i		u2,
 		TGAImage&	image,
-		TGAColor	color,
+		float		intensity,
 		int*		zbuffer
 	)
 {
 	if (t0.y > t1.y)
 	{
 		std::swap(t0, t1);
+		std::swap(u0, u1);
 	}
 	if (t0.y > t2.y)
 	{
 		std::swap(t0, t2);
+		std::swap(u0, u2);
 	}
 	if (t1.y > t2.y)
 	{
 		std::swap(t1, t2);
+		std::swap(u1, u2);
 	}
 
 	int total_height = t2.y - t0.y;
@@ -83,11 +90,14 @@ void triangle(
 		int segment_height = second_half ? t2.y - t1.y : t1.y - t0.y;
 		float alpha = (float) y / total_height;
 		float beta  = (float) (y - (second_half ? t1.y - t0.y : 0)) / segment_height;
-		Vec3i A = t0 + (t2 - t0) * alpha;
-		Vec3i B = second_half ? t1 + (t2 - t1) * beta : t0 + (t1 - t0) * beta;
+		Vec3i A	  = t0 + (t2 - t0) * alpha;
+		Vec2i uvA = u0 + (u2 - u0) * alpha;
+		Vec3i B	  = second_half ? t1 + (t2 - t1) * beta : t0 + (t1 - t0) * beta;
+		Vec2i uvB = second_half ? u1 + (u2 - u1) * beta : u0 + (u1 - u0) * beta;
 		if (A.x > B.x)
 		{
 			std::swap(A, B);
+			std::swap(uvA, uvB);
 		}
 		for (int x = A.x; x < B.x; x++)
 		{
@@ -97,11 +107,22 @@ void triangle(
 					y + t0.y, 
 					A.z + (B.z - A.z) * phi
 				);
+			Vec2i uvP = uvA + (uvB - uvA) * phi;
 			int idx = P.x + P.y * width;
 			if (zbuffer[idx] < P.z)
 			{
 				zbuffer[idx] = P.z;
-				image.set(P.x, P.y, color);
+				TGAColor color = model->diffuse(uvP);
+				image.set(
+						P.x, 
+						P.y, 
+						TGAColor(
+							color.r * intensity,
+							color.g * intensity,
+							color.b * intensity,
+							color.a
+						)
+					);
 			}
 		}
 	}
@@ -147,13 +168,11 @@ int main(int argc, char** argv)
 					to_screen_space(v0),
 					to_screen_space(v1),
 					to_screen_space(v2),
+					model->uv(i, 0),
+					model->uv(i, 1),
+					model->uv(i, 2),
 					image,
-					TGAColor(
-							intensity*255,
-							intensity*255,
-							intensity*255,
-							255
-						),
+					intensity,
 					zbuffer
 				);
 		}
