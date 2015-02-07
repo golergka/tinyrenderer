@@ -136,19 +136,30 @@ int main(int argc, char** argv)
 		model = new Model("obj/head.obj");
 	}
 	TGAImage image(width, height, TGAImage::RGB);
+	Vec3f light_dir = Vec3f(0., 0., 1.);
 	for (int i = 0; i < model->nfaces(); i++)
 	{
 		std::vector<int> face = model->face(i);
 		Vec3f v0 = model->vert(face[0]);
 		Vec3f v1 = model->vert(face[1]);
 		Vec3f v2 = model->vert(face[2]);
-		triangle(
-				to_screen_space(v0),
-				to_screen_space(v1),
-				to_screen_space(v2),
-				image,
-				TGAColor(rand()%255, rand()%255, rand()%255, 255)
-			);
+		Vec3f normal = ((v1 - v0) ^ (v2 - v0)).normalize();
+		float intensity = normal * light_dir;
+		if (intensity > 0)
+		{
+			triangle(
+					to_screen_space(v0),
+					to_screen_space(v1),
+					to_screen_space(v2),
+					image,
+					TGAColor(
+							intensity*255,
+							intensity*255,
+							intensity*255,
+							255
+						)
+				);
+		}
 	}
 	image.flip_vertically(); // i want to have the origin at the left bottom corner of the image
 	image.write_tga_file("output.tga");
