@@ -85,11 +85,18 @@ void triangle(
 			float beta  = (float) (y - t0.y) / segment_height;
 			Vec2i A = t0 + (t2 - t0) * alpha;
 			Vec2i B = t0 + (t1 - t0) * beta;
-			line(A, B, image, color);
+			if (A.x > B.x)
+			{
+				std::swap(A, B);
+			}
+			for(int x = A.x; x <= B.x; x++)
+			{
+				image.set(x, y, color);
+			}
 		}
 	}
 
-	segment_height = t2.y - t1.y + 1;
+	segment_height = t2.y - t1.y;
 	if (segment_height != 0)
 	{
 		for(int y = t1.y; y <= t2.y; y++)
@@ -98,7 +105,14 @@ void triangle(
 			float beta  = (float) (y - t1.y) / segment_height;
 			Vec2i A = t0 + (t2 - t0) * alpha;
 			Vec2i B = t1 + (t2 - t1) * beta;
-			line (A, B, image, color);
+			if (A.x > B.x)
+			{
+				std::swap(A, B);
+			}
+			for(int x = A.x; x <= B.x; x++)
+			{
+				image.set(x, y, color);
+			}
 		}
 	}
 }
