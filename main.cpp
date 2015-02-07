@@ -96,11 +96,6 @@ void triangle(
 		Vec2i B = t1 + (t2 - t1) * beta;
 		line (A, B, image, color);
 	}
-	/*
-	line(t0, t1, image, color);
-	line(t1, t2, image, color);
-	line(t0, t2, image, color);
-	*/
 }
 
 Vec2i to_screen_space(Vec3f v)
