@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "geometry.h"
+#include "tgaimage.h"
 
 class Model
 {
@@ -11,6 +12,13 @@ private:
 	std::vector<std::vector<int> >	_faces;
 	std::vector<Vec3f>				_norms;
 	std::vector<Vec2f>				_uv;
+	TGAImage						_diffuse;
+
+	void							load_texture(
+			std::string filename, 
+			const char *suffix, 
+			TGAImage &img
+		);
 public:
 	Model(const char *filename);
 	~Model();
