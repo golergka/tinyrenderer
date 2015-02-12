@@ -1,23 +1,28 @@
-SYSCONF_LINK = g++
-CPPFLAGS     =
-LDFLAGS      =
-LIBS         = -lm
+COMPILER 	= g++
+CPPFLAGS    =
+LDFLAGS     =
+LIBS        = -lm
 
-DESTDIR = ./
-TARGET  = main
+DESTDIR 	= bin
+BUILDDIR 	= build
+TARGET  	= $(DESTDIR)/main
+SRCDIR 		= src
 
-OBJECTS := $(patsubst %.cpp,%.o,$(wildcard *.cpp))
+SRCEXT = cpp
+SOURCES = $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
+OBJECTS = $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 
-all: $(DESTDIR)$(TARGET)
+$(TARGET): $(OBJECTS)
+	@echo " Linking..."
+	$(COMPILER) $^ -o $(TARGET) $(LIB)
 
-$(DESTDIR)$(TARGET): $(OBJECTS)
-	$(SYSCONF_LINK) -Wall $(LDFLAGS) -o $(DESTDIR)$(TARGET) $(OBJECTS) $(LIBS)
-
-$(OBJECTS): %.o: %.cpp
-	$(SYSCONF_LINK) -Wall $(CPPFLAGS) -c $(CFLAGS) $< -o $@
+$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
+	@echo " Compiling..."
+	@mkdir -p $(BUILDDIR)
+	$(COMPILER) $(CPPFLAGS) -c -o $@ $<
 
 clean:
-	-rm -f $(OBJECTS)
-	-rm -f $(TARGET)
-	-rm -f *.tga
+	@echo " Cleaning..."
+	$(RM) -r $(BUILDDIR) $(TARGET)
 
+all: $(TARGET)
