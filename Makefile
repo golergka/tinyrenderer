@@ -16,14 +16,13 @@ INCLUDES 	:= $(wildcard $(SRC_DIR)/**/*.h $(SRC_DIR)/*.h)
 OBJECTS 	:= $(SOURCES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 TEST_SRC 	:= $(wildcard $(TEST_DIR)/**/*.cpp $(TEST_DIR)/*.cpp)
 TESTS 		:= $(TEST_SRC:$(TEST_DIR)/%.cpp=$(TEST_DIR)/%.o)
-TEST_EXES 	:= $(TESTS:%.o=%.tst)
+TEST_EX 	:= $(TEST_DIR)/main_test
 rm = rm -rf
 
 all: $(EXECUTABLE)
 
-test: $(TEST_EXES)
-	@cd $(TEST_DIR); \
-	./run_tests.sh
+test: $(TEST_EX)
+	./$(TEST_EX)
 
 debug: CXX += -O0 -fno-inline
 debug: all
@@ -33,10 +32,10 @@ $(EXECUTABLE): $(OBJECTS)
 	@mkdir -p $(@D)
 	$(CXX) $(CFLAGS) $(LFLAGS) -o $@ $+ $(LIBS)
 
-$(TEST_EXES): %.tst: %.o
+$(TEST_EX): $(TESTS)
 	@echo "Linking tests..."
 	@mkdir -p $(@D)
-	$(CXX) $(CFLAGS) -o $@ $<
+	$(CXX) $(CFLAGS) $(LFLAGS) -o $@ $< $(LIBS)
 
 $(OBJECTS): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@echo "Compiling..."
@@ -48,7 +47,7 @@ clean:
 	$(rm) $(OBJ_DIR)
 	$(rm) $(TEST_DIR)/*.out
 	$(rm) $(TEST_DIR)/*.log
-	$(rm) $(TESTS) $(TEST_EXES)
+	$(rm) $(TESTS) $(TEST_EX)
 	$(rm) $(DEST_DIR)
 
 .PHONY: all test debug clean
