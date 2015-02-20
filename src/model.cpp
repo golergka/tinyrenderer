@@ -80,6 +80,8 @@ Model::Model(const char *filename) : _verts(), _faces()
 	load_texture(filename, "_diffuse.tga", _diffuse);
 }
 
+Model::~Model() { }
+
 void Model::load_texture(
 		std::string filename,
 		const char* suffix,

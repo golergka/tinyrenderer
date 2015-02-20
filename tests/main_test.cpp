@@ -1,7 +1,9 @@
-#include "../src/geometry.h"
-
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
+#include "../src/geometry.h"
+#include "../src/renderer.h"
+#include "../src/tgaimage.h"
+#include "../src/model.h"
 
 TEST_CASE("basic Vec2i functionality", "[geometry][Vec2]")
 {
@@ -23,5 +25,26 @@ TEST_CASE("basic Vec2i functionality", "[geometry][Vec2]")
 		v[1] = 3;
 		REQUIRE(v.v == 3);
 		REQUIRE(v.y == 3);
+	}
+}
+
+SCENARIO("renderer can render a picture", "[Renderer]")
+{
+	GIVEN("A default renderer")
+	{
+		Renderer r = Renderer();
+		WHEN("the size of image is specified")
+		{
+			int w = 1234;
+			int	h = 5678;
+			r.width = w;
+			r.height = h;
+			TGAImage image = r.render();
+			THEN("the rendered image has this size")
+			{
+				REQUIRE(image.get_width() == w);
+				REQUIRE(image.get_height() == h);
+			}
+		}
 	}
 }

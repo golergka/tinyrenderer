@@ -11,12 +11,13 @@ OBJ_DIR 	= build
 SRC_DIR 	= src
 TEST_DIR 	= tests
 
-SOURCES 	:= $(wildcard $(SRC_DIR)/**/*.cpp $(SRC_DIR)/*.cpp)
-INCLUDES 	:= $(wildcard $(SRC_DIR)/**/*.h $(SRC_DIR)/*.h)
-OBJECTS 	:= $(SOURCES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
-TEST_SRC 	:= $(wildcard $(TEST_DIR)/**/*.cpp $(TEST_DIR)/*.cpp)
-TESTS 		:= $(TEST_SRC:$(TEST_DIR)/%.cpp=$(TEST_DIR)/%.o)
-TEST_EX 	:= $(TEST_DIR)/main_test
+SOURCES 	= $(wildcard $(SRC_DIR)/**/*.cpp $(SRC_DIR)/*.cpp)
+OBJECTS 	= $(SOURCES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+SOURCES_T 	= $(filter-out $(SRC_DIR)/main.cpp, $(SOURCES))
+OBJECTS_T 	= $(SOURCES_T:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+TEST_SRC 	= $(wildcard $(TEST_DIR)/**/*.cpp $(TEST_DIR)/*.cpp)
+TESTS 		= $(TEST_SRC:$(TEST_DIR)/%.cpp=$(TEST_DIR)/%.o)
+TEST_EX 	= $(TEST_DIR)/main_test
 rm = rm -rf
 
 all: $(EXECUTABLE)
@@ -32,10 +33,10 @@ $(EXECUTABLE): $(OBJECTS)
 	@mkdir -p $(@D)
 	$(CXX) $(CFLAGS) $(LFLAGS) -o $@ $+ $(LIBS)
 
-$(TEST_EX): $(TESTS)
+$(TEST_EX): $(TESTS) $(OBJECTS_T)
 	@echo "Linking tests..."
 	@mkdir -p $(@D)
-	$(CXX) $(CFLAGS) $(LFLAGS) -o $@ $< $(LIBS)
+	$(CXX) $(CFLAGS) $(LFLAGS) -o $@ $+ $(LIBS)
 
 $(OBJECTS): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@echo "Compiling..."
@@ -50,4 +51,7 @@ clean:
 	$(rm) $(TESTS) $(TEST_EX)
 	$(rm) $(DEST_DIR)
 
-.PHONY: all test debug clean
+print-%:
+	@echo '$*=$($*)'
+
+.PHONY: all test debug clean print-%
