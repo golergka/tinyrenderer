@@ -5,6 +5,7 @@
 #include "../src/renderer.h"
 #include "../src/tgaimage.h"
 #include "../src/model.h"
+#include "../src/matrix.h"
 
 TEST_CASE("basic Vec2i functionality", "[geometry][Vec2]")
 {
@@ -45,6 +46,58 @@ SCENARIO("renderer can render a picture", "[Renderer]")
 			{
 				REQUIRE(image.get_width() == w);
 				REQUIRE(image.get_height() == h);
+			}
+		}
+	}
+}
+
+SCENARIO("matrices can be created correctly", "[Matrix]")
+{
+	GIVEN("An identity matrix of dimension 2")
+	{
+		Matrix m = Matrix::identity(2);
+		WHEN("the user checks size of the matrix")
+		{
+			THEN("it has 2 rows")
+			{
+				REQUIRE(2 == m.nrows());
+			}
+			THEN("it has 2 columns")
+			{
+				REQUIRE(2 == m.ncols());
+			}
+		}
+		WHEN("the user checks values of the matrix")
+		{
+			for (int x = 0; x < m.nrows(); x++)
+			{
+				for (int y = 0; y < m.ncols(); y++)
+				{
+					float v = m[x][y];
+					if (x == y)
+					{
+						THEN("it is 1 on main diagonal")
+						{
+							REQUIRE(v == 1.);
+						}
+					}
+					else
+					{
+						THEN("it is 0 outside the main diagonal")
+						{
+							REQUIRE(v == 0.);
+						}
+					}
+				}
+			}
+		}
+		WHEN("the user edits the matrix")
+		{
+			float n = 3.;
+			m[0][1] = n;
+			THEN("it saves the new value")
+			{
+				REQUIRE(m[0][1] == n);
 			}
 		}
 	}
