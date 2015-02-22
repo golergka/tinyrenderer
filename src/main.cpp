@@ -2,7 +2,8 @@
 #include <iostream>
 #include "tgaimage.h"
 #include "model.h"
-#include "geometry.h"
+#include "vec2.h"
+#include "vec3.h"
 #include "renderer.h"
 
 int main(int argc, char** argv)

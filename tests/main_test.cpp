@@ -1,6 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-#include "../src/geometry.h"
+#include "../src/vec2.h"
+#include "../src/vec3.h"
 #include "../src/renderer.h"
 #include "../src/tgaimage.h"
 #include "../src/model.h"
