@@ -16,6 +16,12 @@ public:
 	static Matrix identity(int dimensions);
 
 	std::vector<float>& operator[](const int i);
+	std::vector<float> operator[](const int i) const;
+	Matrix operator*(const Matrix a) const;
+	Matrix transpose();
+	Matrix inverse();
+
+	friend std::ostream& operator <<(std::ostream& s, const Matrix& m);
 };
 
 #endif // __MATRIX_H__
