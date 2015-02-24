@@ -16,6 +16,18 @@ template <class t> struct Vec3
 	Vec3() : x(0), y(0), z(0) {}
 	Vec3(t _x, t _y, t _z) : x(_x), y(_y), z(_z) {}
 
+	inline bool operator ==(const Vec3<t> &v) const
+	{
+		return x == v.x
+			&& y == v.y
+			&& z == v.z;
+	}
+
+	inline bool operator !=(const Vec3<t> &v) const
+	{
+		return !(*this == v);
+	}
+
 	inline Vec3<t> operator ^(const Vec3<t> &v) const
 	{
 		return Vec3<t> (
@@ -64,13 +76,13 @@ template <class t> struct Vec3
 					y : z);
 	}
 
-	template <class> friend std::ostream& operator<<(std::ostream& s, Vec2<t>& v);
+	template <class> friend std::ostream& operator<<(std::ostream& s, Vec3<t>& v);
 };
 
 typedef Vec3<float> Vec3f;
 typedef Vec3<int>	Vec3i;
 
-template <class t> std::ostream& operator <<(std::ostream& s, Vec3<t>& v)
+template <class t> std::ostream& operator <<(std::ostream& s, const Vec3<t>& v)
 {
 	s << "(" << v.x << ", " << v.y << ", " << v.z << ")" << std::endl;
 	return s;
