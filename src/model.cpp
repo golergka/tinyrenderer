@@ -135,7 +135,7 @@ Vec2i Model::uv(int iface, int nvert)
 		);
 }
 
-TGAColor Model::diffuse(Vec2i uv)
+TGAColor Model::diffuse(Vec2i uv) const
 {
 	return _diffuse.get(uv.x, uv.y);
 }
