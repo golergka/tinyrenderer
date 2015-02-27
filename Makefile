@@ -21,6 +21,7 @@ TEST_EX 	= $(TEST_DIR)/main_test
 
 # Tools
 RM 			= rm -rf
+VALGRIND  	= valgrind --error-exitcode=1 --leak-check=yes --suppressions=valgrind-osx.supp 
 
 all: $(EXECUTABLE)
 
@@ -31,7 +32,10 @@ debug: CFLAGS += -O0 -fno-inline -g
 debug: all
 
 valgrind: debug
-	@valgrind --error-exitcode=1 --leak-check=yes --suppressions=valgrind-osx.supp $(EXECUTABLE)
+	$(VALGRIND) $(EXECUTABLE)
+
+valgrind-test: test
+	$(VALGRIND) $(TEST_EX)
 
 $(EXECUTABLE): $(OBJECTS)
 	@echo "Linking..."
