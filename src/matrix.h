@@ -81,7 +81,7 @@ Matrix<S,S> identity()
 		{
 			if (x == y)
 			{
-				matrix[x][y] = 1.;
+				matrix[x][y] = 1.f;
 			}
 		}
 	}
