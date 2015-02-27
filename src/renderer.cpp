@@ -45,7 +45,7 @@ Vec3i Renderer::world_to_screen_space(Vec3f v)
 		);
 }
 
-void Renderer::render_model(Model model)
+void Renderer::render_model(Model& model)
 {
 	for(int i = 0; i < model.nfaces(); i++)
 	{
@@ -78,7 +78,7 @@ void Renderer::draw_triangle(
 		Vec2i u0,
 		Vec2i u1,
 		Vec2i u2,
-		Model model,
+		const Model& model,
 		float intensity
 	)
 {

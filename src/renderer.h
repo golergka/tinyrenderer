@@ -11,7 +11,7 @@ private:
 	int*		_zbuffer;
 	TGAImage	_image; 
 
-	void		render_model(Model model);
+	void		render_model(Model& model);
 	float		light_intensity(Vec3f normal);
 	Vec3i		world_to_screen_space(Vec3f v);
 	void		draw_triangle(
@@ -21,7 +21,7 @@ private:
 		Vec2i u0,
 		Vec2i u1,
 		Vec2i u2,
-		Model model,
+		const Model& model,
 		float intensity
 	);
 
