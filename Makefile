@@ -18,15 +18,20 @@ OBJECTS_T 	= $(SOURCES_T:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 TEST_SRC 	= $(wildcard $(TEST_DIR)/**/*.cpp $(TEST_DIR)/*.cpp)
 TESTS 		= $(TEST_SRC:$(TEST_DIR)/%.cpp=$(TEST_DIR)/%.o)
 TEST_EX 	= $(TEST_DIR)/main_test
-rm = rm -rf
+
+# Tools
+RM 			= rm -rf
 
 all: $(EXECUTABLE)
 
 test: $(TEST_EX)
 	./$(TEST_EX)
 
-debug: CXX += -O0 -fno-inline
+debug: CFLAGS += -O0 -fno-inline -g
 debug: all
+
+valgrind: debug
+	@valgrind --error-exitcode=1 --leak-check=yes --suppressions=valgrind-osx.supp $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	@echo "Linking..."
@@ -45,11 +50,11 @@ $(OBJECTS): $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 clean:
 	@echo "Cleaning..."
-	$(rm) $(OBJ_DIR)
-	$(rm) $(TEST_DIR)/*.out
-	$(rm) $(TEST_DIR)/*.log
-	$(rm) $(TESTS) $(TEST_EX)
-	$(rm) $(DEST_DIR)
+	$(RM) $(OBJ_DIR)
+	$(RM) $(TEST_DIR)/*.out
+	$(RM) $(TEST_DIR)/*.log
+	$(RM) $(TESTS) $(TEST_EX)
+	$(RM) $(DEST_DIR)
 
 print-%:
 	@echo '$*=$($*)'
