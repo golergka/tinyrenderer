@@ -21,6 +21,7 @@ TGAImage Renderer::render()
 		render_model(models[i]);
 	}
 
+	delete _zbuffer;
 	_image.flip_vertically(); // i want to have the origin at the left bottom corner of the image
 	return _image;
 }
