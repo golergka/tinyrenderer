@@ -32,6 +32,9 @@ debug: CFLAGS += -O0 -fno-inline -g
 debug: LFLAGS += -g
 debug: all
 
+release: CFLAGS += -Ofast
+release: all
+
 valgrind: debug
 	$(VALGRIND) $(EXECUTABLE)
 
