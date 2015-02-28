@@ -4,6 +4,7 @@
 #include <vector>
 #include "model.h"
 #include "tgaimage.h"
+#include "matrix.h"
 
 class Renderer
 {
@@ -33,7 +34,8 @@ public:
 
 	Renderer();
 
-	TGAImage render();
+	TGAImage	render();
+	bool		in_bounds(const int w, const int h) const;
 };
 
 #endif // __RENDERER_H__

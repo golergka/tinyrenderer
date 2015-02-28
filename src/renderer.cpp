@@ -38,10 +38,15 @@ float Renderer::light_intensity(Vec3f normal)
 
 Vec3i Renderer::world_to_screen_space(Vec3f v)
 {
+	Matrix<4,1> vm = v2m(v);
+	Matrix<4,4> projection = identity<4>();
+	projection[3][2] = -1.f;
+	vm = projection * vm;
+	Vec3f r = m2v(vm);
 	return Vec3i(
-			(v.x + 1.) * (width / 2.),
-			(v.y + 1.) * (height / 2.),
-			v.z
+			(r.x + 1.) * (width / 2.),
+			(r.y + 1.) * (height / 2.),
+			r.z
 		);
 }
 
@@ -125,23 +130,31 @@ void Renderer::draw_triangle(
 					y + t0.y, 
 					A.z + (B.z - A.z) * phi
 				);
-			Vec2i uvP = uvA + (uvB - uvA) * phi;
-			int idx = P.x + P.y * width;
-			if (_zbuffer[idx] < P.z)
+			if (in_bounds(P.x,P.y))
 			{
-				_zbuffer[idx] = P.z;
-				TGAColor color = model.diffuse(uvP);
-				_image.set(
-						P.x, 
-						P.y, 
-						TGAColor(
-							color.r * intensity,
-							color.g * intensity,
-							color.b * intensity,
-							color.a
-						)
-					);
+				Vec2i uvP = uvA + (uvB - uvA) * phi;
+				int idx = P.x + P.y * width;
+				if (_zbuffer[idx] < P.z)
+				{
+					_zbuffer[idx] = P.z;
+					TGAColor color = model.diffuse(uvP);
+					_image.set(
+							P.x, 
+							P.y, 
+							TGAColor(
+								color.r * intensity,
+								color.g * intensity,
+								color.b * intensity,
+								color.a
+							)
+						);
+				}
 			}
 		}
 	}
+}
+
+bool Renderer::in_bounds(const int w, const int h) const
+{
+	return w >= 0 && w < width && h >= 0 && h < height;
 }
