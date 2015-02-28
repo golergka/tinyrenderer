@@ -21,7 +21,7 @@ TEST_EX 	= $(TEST_DIR)/main_test
 
 # Tools
 RM 			= rm -rf
-VALGRIND  	= valgrind --error-exitcode=1 --leak-check=yes --suppressions=valgrind-osx.supp 
+VALGRIND  	= valgrind --error-exitcode=1 --track-origins=yes --leak-check=full --dsymutil=yes --suppressions=valgrind-osx.supp 
 
 all: $(EXECUTABLE)
 
@@ -29,6 +29,7 @@ test: $(TEST_EX)
 	./$(TEST_EX)
 
 debug: CFLAGS += -O0 -fno-inline -g
+debug: LFLAGS += -g
 debug: all
 
 valgrind: debug
