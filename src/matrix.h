@@ -95,4 +95,6 @@ Matrix<4,1> v2m(const Vec3f v);
 
 Matrix<4,4> move_by(const Vec3f v);
 
+Matrix<4,4> scale_by(const Vec3f v);
+
 #endif // __MATRIX_H__

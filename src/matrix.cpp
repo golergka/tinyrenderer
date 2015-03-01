@@ -31,3 +31,13 @@ Matrix<4,4> move_by(const Vec3f v)
 	result[2][3] = v.z;
 	return result;
 }
+
+Matrix<4,4> scale_by(const Vec3f v)
+{
+	Matrix<4,4> result = Matrix<4,4>();
+	result[0][0] = v.x;
+	result[1][1] = v.y;
+	result[2][2] = v.z;
+	result[3][3] = 1;
+	return result;
+}
