@@ -204,3 +204,29 @@ SCENARIO("matrix-vector conversion works correctly", "[Matrix][Vec3]")
 		}
 	}
 }
+
+SCENARIO("using transformation matrices", "[Matrix]")
+{
+	GIVEN("a translation matrix by vector 2,3,0")
+	{
+		Matrix<4,4> translation = move_by(Vec3f(2,3,0));
+		WHEN("a vector -2,-3,0 is converted to matrix and multiplied by it")
+		{
+			Matrix<4,1> m = v2m(Vec3f(-2,-3,0));
+			CAPTURE(m);
+			Matrix<4,1> r = translation * m;
+			CAPTURE(r);
+			WHEN("the result of multiplication is converted back to a vector")
+			{
+				Vec3f rv = m2v(r);
+				CAPTURE(rv);
+				THEN("it is equal to vector 0,0,0")
+				{
+					CHECK(rv.x == 0);
+					CHECK(rv.y == 0);
+					CHECK(rv.z == 0);
+				}
+			}
+		}
+	}
+}

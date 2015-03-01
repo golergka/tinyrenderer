@@ -22,3 +22,12 @@ Matrix<4,1> v2m(const Vec3f v)
 	m[3][0] = 1;
 	return m;
 }
+
+Matrix<4,4> move_by(const Vec3f v)
+{
+	Matrix<4,4> result = identity<4>();
+	result[0][3] = v.x;
+	result[1][3] = v.y;
+	result[2][3] = v.z;
+	return result;
+}
