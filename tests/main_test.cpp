@@ -1,5 +1,7 @@
+#define _USE_MATH_DEFINES
 #define CATCH_CONFIG_MAIN
 #include <stdexcept>
+#include <cmath>
 #include "catch.hpp"
 #include "../src/vec2.h"
 #include "../src/vec3.h"
@@ -252,6 +254,96 @@ SCENARIO("using transformation matrices", "[Matrix]")
 						CHECK(rv.x == -1);
 						CHECK(rv.y == 10);
 						CHECK(rv.z == -5);
+					}
+				}
+			}
+		}
+	}
+	GIVEN("a rotation matrix around axis x by angle of 3/4 pi")
+	{
+		Matrix<4,4> rotation = rotate_by_x(M_PI * 3.f / 4.f);
+		CAPTURE(rotation);
+		GIVEN("a vector (2, 5, -7)")
+		{
+			Vec3f v = Vec3f(2, 5, -7);
+			WHEN("this vector is converted to a matrix")
+			{
+				Matrix<4,1> m = v2m(v);
+				CAPTURE(m);
+				WHEN("this matrix is multiplied by rotation matrix")
+				{
+					Matrix<4,1> r = rotation * m;
+					CAPTURE(r);
+					WHEN("the result is converted back to vector")
+					{
+						Vec3f rv = m2v(r);
+						CAPTURE(rv);
+						THEN("it is approximately equal to vector (2, 1.41, 8.48)")
+						{
+							CHECK(std::abs(rv.x - 2.f  ) < 0.1f);
+							CHECK(std::abs(rv.y - 1.41f) < 0.1f);
+							CHECK(std::abs(rv.z - 8.48f) < 0.1f);
+						}
+					}
+				}
+			}
+		}
+	}
+	GIVEN("a rotation matrix around axis y by angle of 1/4 pi")
+	{
+		Matrix<4,4> rotation = rotate_by_y(M_PI * 1.f / 4.f);
+		CAPTURE(rotation);
+		GIVEN("a vector (3, -6, 8)")
+		{
+			Vec3f v = Vec3f(3, -6, 8);
+			WHEN("this vector is converted to a matrix")
+			{
+				Matrix<4,1> m = v2m(v);
+				CAPTURE(m);
+				WHEN("this matrix is multiplied by rotation matrix")
+				{
+					Matrix<4,1> r = rotation * m;
+					CAPTURE(r);
+					WHEN("the result is converted back to vector")
+					{
+						Vec3f rv = m2v(r);
+						CAPTURE(rv);
+						THEN("it is approximately equal to vector (7.77, -6, 3.53)")
+						{
+							CHECK(std::abs(rv.x - 7.77f) < 0.1f);
+							CHECK(std::abs(rv.y - -6.f ) < 0.1f);
+							CHECK(std::abs(rv.z - 3.53f) < 0.1f);
+						}
+					}
+				}
+			}
+		}
+	}
+	GIVEN("a rotation matrix around axis z by angle of -1/3 pi")
+	{
+		Matrix<4,4> rotation = rotate_by_z(- M_PI / 3.f);
+		CAPTURE(rotation);
+		GIVEN("a vector (-10, 0, 5)")
+		{
+			Vec3f v = Vec3f(-10, 0, 5);
+			WHEN("this vector is converted to a matrix")
+			{
+				Matrix<4,1> m = v2m(v);
+				CAPTURE(m);
+				WHEN("this matrix is multiplied by rotation matrix")
+				{
+					Matrix<4,1> r = rotation * m;
+					CAPTURE(r);
+					WHEN("the result is converted back to vector")
+					{
+						Vec3f rv = m2v(r);
+						CAPTURE(rv);
+						THEN("it is approximately equal to vector (-5, 8.66, 5)")
+						{
+							CHECK(std::abs(rv.x - -5.f ) < 0.1f);
+							CHECK(std::abs(rv.y - 8.66f) < 0.1f);
+							CHECK(std::abs(rv.z - 5.f  ) < 0.1f);
+						}
 					}
 				}
 			}

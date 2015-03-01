@@ -97,4 +97,10 @@ Matrix<4,4> move_by(const Vec3f v);
 
 Matrix<4,4> scale_by(const Vec3f v);
 
+Matrix<4,4> rotate_by_x(float a);
+
+Matrix<4,4> rotate_by_y(float a);
+
+Matrix<4,4> rotate_by_z(float a);
+
 #endif // __MATRIX_H__
