@@ -76,6 +76,14 @@ template <class t> struct Vec3
 					y : z);
 	}
 
+	const t operator[] (const int i) const
+	{
+		return i <= 0 ?
+				x : (
+					i == 1 ?
+					y : z);
+	}
+
 	template <class> friend std::ostream& operator<<(std::ostream& s, Vec3<t>& v);
 };
 
