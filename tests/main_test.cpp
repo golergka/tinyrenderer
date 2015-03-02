@@ -9,6 +9,7 @@
 #include "../src/tgaimage.h"
 #include "../src/model.h"
 #include "../src/matrix.h"
+#include "../src/euler_angles.h"
 
 TEST_CASE("basic Vec2i functionality", "[geometry][Vec2]")
 {
@@ -379,6 +380,26 @@ SCENARIO("using transformation matrices", "[Matrix]")
 						}
 					}
 				}
+			}
+		}
+	}
+}
+
+SCENARIO("using euler angles", "[EulerAngles][Matrix]")
+{
+	GIVEN("euler angles of (Pi/6, 0, 0)")
+	{
+		EulerAngles a = EulerAngles(M_PI / 6, 0, 0);
+		CAPTURE(a);
+		WHEN("a rotation matrix is extraceted from these euler angles")
+		{
+			Matrix<4,4> rotation = a.get_rotation();
+			CAPTURE(rotation);
+			THEN("this matrix is indentical to rotate_by_x matrix created with this angle")
+			{
+				Matrix<4,4> rotation2 = rotate_by_x(M_PI / 6);
+				CAPTURE(rotation2);
+				CHECK(rotation == rotation2);
 			}
 		}
 	}
