@@ -127,6 +127,39 @@ SCENARIO("matrices can be created and operated correctly", "[Matrix]")
 		m[1][1] = 9.;
 		m[2][0] = -2.;
 		m[2][1] = 1.;
+		CAPTURE(m);
+		WHEN("another equal matrix is created")
+		{
+			Matrix<3,2> n = Matrix<3,2>();
+			n[0][0] = 5.;
+			n[0][1] = 0.;
+			n[1][0] = 3.;
+			n[1][1] = 9.;
+			n[2][0] = -2.;
+			n[2][1] = 1.;
+			CAPTURE(n);
+			THEN("they are considered equal")
+			{
+				CHECK(m == n);
+				CHECK(!(m != n));
+			}
+		}
+		WHEN("a different matrix is created of size 3x2")
+		{
+			Matrix<3,2> n = Matrix<3,2>();
+			n[0][0] = 3.;
+			n[0][1] = 0.;
+			n[1][0] = 3.;
+			n[1][1] = 9.;
+			n[2][0] = -2.;
+			n[2][1] = 1.;
+			CAPTURE(n);
+			THEN("they are not equal")
+			{
+				CHECK(m != n);
+				CHECK(!(m == n));
+			}
+		}
 		WHEN("it is multiplied by another simple matrix of size 2x1")
 		{
 			Matrix<2,1> n = Matrix<2, 1>();

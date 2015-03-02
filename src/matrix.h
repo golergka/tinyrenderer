@@ -64,6 +64,27 @@ public:
 		}
 		return result;
 	}
+
+	inline bool operator ==(const Matrix<R,C> &v) const
+	{
+		for(std::size_t x = 0; x < R; x++)
+		{
+			for(std::size_t y = 0; y < C; y++)
+			{
+				if (m[x][y] != v.m[x][y])
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	inline bool operator !=(const Matrix<R,C> &v) const
+	{
+		return !(*this == v);
+	}
+
 	//Matrix transpose();
 	//Matrix inverse();
 
