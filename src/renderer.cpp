@@ -1,3 +1,4 @@
+#include <cmath>
 #include "renderer.h"
 
 Renderer::Renderer() : width(800), height(800), models(), lights() { }
@@ -14,6 +15,19 @@ TGAImage Renderer::render()
 		// Minimum value by default
 		_zbuffer[i] = std::numeric_limits<int>::min();
 	}
+
+	// Prepare projection matrix
+	_projection_matrix = identity<4>();
+	_projection_matrix = _projection_matrix * move_by(Vec3f(1,0,1));
+	EulerAngles cameraRotation = EulerAngles(
+			- M_PI / 4.f,
+			- M_PI / 2.f,
+			0
+		);
+	_projection_matrix = _projection_matrix * cameraRotation.get_rotation();
+	Matrix<4,4> perspective = identity<4>();
+	perspective[3][2] = -0.5f;
+	_projection_matrix = _projection_matrix * perspective;
 
 	// Rendering the models
 	for (int i = 0; i < models.size(); i++)
@@ -38,11 +52,8 @@ float Renderer::light_intensity(Vec3f normal)
 
 Vec3i Renderer::world_to_screen_space(Vec3f v)
 {
-	Matrix<4,1> vm = v2m(v);
-	Matrix<4,4> projection = identity<4>();
-	projection[3][2] = -1.f;
-	vm = projection * vm;
-	Vec3f r = m2v(vm);
+	Matrix<4,1> m = v2m(v);
+	Vec3f r = m2v(_projection_matrix * m);
 	return Vec3i(
 			(r.x + 1.) * (width / 2.),
 			(r.y + 1.) * (height / 2.),

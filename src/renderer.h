@@ -5,12 +5,14 @@
 #include "model.h"
 #include "tgaimage.h"
 #include "matrix.h"
+#include "euler_angles.h"
 
 class Renderer
 {
 private:
-	int*		_zbuffer;
-	TGAImage	_image; 
+	int*			_zbuffer;
+	TGAImage		_image; 
+	Matrix<4,4>		_projection_matrix;
 
 	void		render_model(Model& model);
 	float		light_intensity(Vec3f normal);
